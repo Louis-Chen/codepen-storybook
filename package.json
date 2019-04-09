@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@storybook/addon-centered": "^5.0.6",
     "@storybook/addon-console": "^1.1.0",
     "@storybook/addon-info": "^5.0.6",
     "draft-js": "^0.10.5",
