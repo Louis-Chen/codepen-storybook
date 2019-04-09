@@ -7,7 +7,7 @@ import { Field as Input } from '../field'
 import * as yup from 'yup'
 const AuthRegister = props => {
 	return (
-		<Form as={Segment}>
+		<Form>
 			<Header as="h1" content="註冊表單" />
 			<Divider />
 			<Formik>

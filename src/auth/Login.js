@@ -7,7 +7,7 @@ import { Field as Input } from '../field'
 
 const AuthLogin = props => {
 	return (
-		<Form as={Segment}>
+		<Form>
 			<Header as="h1" content="登入表單" />
 			<Divider />
 			<Formik>
@@ -30,9 +30,7 @@ const AuthLogin = props => {
 
 const enhancer = withFormik({
 	mapPropsToValues: () => ({ account: '', password: '' }),
-
 	// Custom sync validation
-
 	validationSchema: () =>
 		yup.object().shape({
 			account: yup
