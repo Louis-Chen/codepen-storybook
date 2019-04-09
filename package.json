@@ -3,9 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@storybook/addon-console": "^1.1.0",
+    "@storybook/addon-info": "^5.0.6",
+    "formik": "^1.5.2",
+    "immutability-helper": "^3.0.0",
+    "polyfills": "^2.1.1",
     "react": "^16.8.6",
+    "react-beautiful-dnd": "^11.0.0-beta.2",
     "react-dom": "^16.8.6",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "react-styled-flexboxgrid": "^3.1.0",
+    "recompose": "^0.30.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.86.0",
+    "styled-components": "^4.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -25,11 +36,11 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@storybook/react": "^5.0.6",
+    "@babel/core": "^7.4.3",
     "@storybook/addon-actions": "^5.0.6",
     "@storybook/addon-links": "^5.0.6",
     "@storybook/addons": "^5.0.6",
-    "@babel/core": "^7.4.3",
+    "@storybook/react": "^5.0.6",
     "babel-loader": "^8.0.5"
   }
 }
