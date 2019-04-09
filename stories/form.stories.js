@@ -1,10 +1,9 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 
-import ProductForm from '../src/product/Form'
-import ProductArticle from '../src/product/Article'
-import ProductImages from '../src/product/Images'
-import { ProductsCard } from '../src/product/Posters'
+import ProductForm from '../src/form/Form'
+import ProductArticle from '../src/form/Article'
+import ProductImages from '../src/form/Images'
 
 /**
  * 商品表單
