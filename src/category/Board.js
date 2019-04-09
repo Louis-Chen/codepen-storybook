@@ -14,6 +14,7 @@ const CategoryBlock = ({ categories, catalogs }) => {
 
 	const onDragEnd = result => {
 		const { draggableId, source, destination } = result
+
 		if (!destination || !draggableId) {
 			return
 		}
