@@ -11,6 +11,12 @@ const VerifyResetPassword = props => {
 			<Formik>
 				<Form.Group widths="equal">
 					<Form.Field>
+						<label>請輸入信箱</label>
+						<Field name="email" type="email" component={Input.Text} />
+					</Form.Field>
+				</Form.Group>
+				<Form.Group widths="equal">
+					<Form.Field>
 						<label>請輸入新密碼</label>
 						<Field name="password" type="password" component={Input.Text} />
 					</Form.Field>
@@ -28,12 +34,16 @@ const VerifyResetPassword = props => {
 }
 
 const enhancer = withFormik({
-	mapPropsToValues: () => ({ account: '', password: '', confirm_password: '' }),
+	mapPropsToValues: () => ({ email: '', password: '', confirm_password: '' }),
 
 	// Custom sync validation
 
 	validationSchema: () =>
 		yup.object().shape({
+			email: yup
+				.string()
+				.required('必填')
+				.email(),
 			password: yup
 				.string()
 				.required('必填')
