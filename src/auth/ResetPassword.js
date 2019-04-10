@@ -15,35 +15,33 @@ const RetsetPassword = props => {
 					<Field name="email" type="email" placeholder="帳號(信箱)" component={Input.Text} />
 					<ErrorMessage name="email" />
 				</Form.Field>
-				<Button type="submit" fluid content="登入" />
+				<Button type="submit" fluid content="寄出" />
 			</Formik>
 		</Form>
 	)
 }
 
-const enhancer = compose(
-	withFormik({
-		mapPropsToValues: () => ({ email: '' }),
+const enhancer = withFormik({
+	mapPropsToValues: () => ({ email: '' }),
 
-		// Custom sync validation
+	// Custom sync validation
 
-		validationSchema: () =>
-			yup.object().shape({
-				email: yup
-					.string()
-					.email('不符合信箱格式')
-					.required('必填')
-			}),
-		handleSubmit: (values, { setSubmitting }) => {
-			setTimeout(() => {
-				alert(JSON.stringify(values, null, 2))
+	validationSchema: () =>
+		yup.object().shape({
+			email: yup
+				.string()
+				.email('不符合信箱格式')
+				.required('必填')
+		}),
+	handleSubmit: (values, { setSubmitting }) => {
+		setTimeout(() => {
+			alert(JSON.stringify(values, null, 2))
 
-				setSubmitting(false)
-			}, 1000)
-		},
+			setSubmitting(false)
+		}, 1000)
+	},
 
-		displayName: 'AuthRetsetPassword'
-	})
-)
+	displayName: 'AuthRetsetPassword'
+})
 
 export default enhancer(RetsetPassword)
