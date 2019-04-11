@@ -9,6 +9,7 @@
     "draft-js": "^0.10.5",
     "draftjs-to-html": "^0.8.4",
     "formik": "^1.5.2",
+    "google-map-react": "^1.1.4",
     "html-to-draftjs": "^1.4.0",
     "immutability-helper": "^3.0.0",
     "polyfills": "^2.1.1",
