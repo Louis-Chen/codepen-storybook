@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
+import axios from 'axios'
+
 import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps'
 
 import MarkerClusterer from 'react-google-maps/lib/components/addons/MarkerClusterer'
 import { compose, withProps } from 'recompose'
 import { Header, Divider, List } from 'semantic-ui-react'
+
+
 const GogoroStationMap = props => {
 	const [station, setStation] = useState([])
 	const [isOpen, setOpen] = useState(false)
 	const [isInfo, setInfoID] = useState('')
 
-	const fetchAPI = fetch('https://wapi.gogoro.com/tw/api/vm/list')
+	const fetchAPI = axios
+		.get('https://wapi.gogoro.com/tw/api/vm/list')
 		.then(response => {
-			return response.json()
-		})
-		.then(data => {
+			// handle success
 			const preparation = []
 			// 資料格式預處理
-			data.data.map((d, i) => {
+			response.data.data.map((d, i) => {
 				const LocName = JSON.parse(d.LocName)
 				const Address = JSON.parse(d.Address)
 				const District = JSON.parse(d.District)
@@ -37,6 +40,10 @@ const GogoroStationMap = props => {
 				})
 			})
 			return setStation(preparation)
+		})
+		.catch(function(error) {
+			// handle error
+			console.log(error)
 		})
 	useEffect(() => {
 		return () => {
