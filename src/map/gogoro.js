@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
-import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps'
-import { compose, withProps } from 'recompose'
+import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps'
 
+import MarkerClusterer from 'react-google-maps/lib/components/addons/MarkerClusterer'
+import { compose, withProps } from 'recompose'
+import { Header, Divider, List } from 'semantic-ui-react'
 const GogoroStationMap = props => {
 	const [station, setStation] = useState([])
+	const [isOpen, setOpen] = useState(false)
+	const [isInfo, setInfoID] = useState('')
+
 	const fetchAPI = fetch('https://wapi.gogoro.com/tw/api/vm/list')
 		.then(response => {
 			return response.json()
@@ -38,12 +43,35 @@ const GogoroStationMap = props => {
 			fetchAPI
 		}
 	}, [])
-
+	const toggleInfo = (open, id) => {
+		setInfoID(id)
+		setOpen(open)
+	}
+	const StationMark =
+		!isEmpty(station) &&
+		station.map((s, i) => {
+			const StationInfo = isOpen && isInfo === i && (
+				<InfoWindow position={{ lat: s.Latitude, lng: s.Longitude }}>
+					<React.Fragment>
+						<Header content={s.LocName.List[1].Value} />
+						<Divider />
+						<List>
+							<List.Item>{s.Address.List[1].Value}</List.Item>
+						</List>
+					</React.Fragment>
+				</InfoWindow>
+			)
+			return (
+				<Marker key={i} position={{ lat: s.Latitude, lng: s.Longitude }} onClick={() => toggleInfo(true, i)}>
+					{StationInfo}
+				</Marker>
+			)
+		})
 	return (
 		<React.Fragment>
 			<pre>{JSON.stringify(station, null, 2)}</pre>
 			<GoogleMap defaultZoom={7} defaultCenter={{ lat: 23.5, lng: 120 }}>
-				{!isEmpty(station) && station.map((s, i) => <Marker position={{ lat: s.Latitude, lng: s.Longitude }} />)}
+				<MarkerClusterer>{StationMark}</MarkerClusterer>
 			</GoogleMap>
 		</React.Fragment>
 	)
