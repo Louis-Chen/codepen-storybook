@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import axios from 'axios'
 
-import { GoogleMap, Marker, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps'
+import { GoogleMap, LoadScript, MarkerClusterer, Marker, InfoWindow } from '@react-google-maps/api'
 
-import MarkerClusterer from 'react-google-maps/lib/components/addons/MarkerClusterer'
-import { compose, withProps } from 'recompose'
+import { compose } from 'recompose'
 import { Header, Divider, List } from 'semantic-ui-react'
 
+const GOOGLEAPIKEY = 'AIzaSyAkdvJpmaNSRVqu35dqpgqcEHVso3OilEc'
 
 const GogoroStationMap = props => {
 	const [station, setStation] = useState([])
-	const [isOpen, setOpen] = useState(false)
-	const [isInfo, setInfoID] = useState('')
-
+	const [center, changeCenter] = useState({ lat: 23.5, lng: 121 })
+	const [infoWindow, openInfoWindow] = useState('')
 	const fetchAPI = axios
-		.get('https://wapi.gogoro.com/tw/api/vm/list')
+		.get('https://webapi.gogoro.com/api/vm/list')
 		.then(response => {
 			// handle success
 			const preparation = []
 			// 資料格式預處理
-			response.data.data.map((d, i) => {
+			response.data.map((d, i) => {
 				const LocName = JSON.parse(d.LocName)
 				const Address = JSON.parse(d.Address)
 				const District = JSON.parse(d.District)
@@ -50,55 +49,65 @@ const GogoroStationMap = props => {
 			fetchAPI
 		}
 	}, [])
-	const toggleInfo = (open, id) => {
-		setInfoID(id)
-		setOpen(open)
-	}
-	const StationMark =
-		!isEmpty(station) &&
-		station.map((s, i) => {
-			const StationInfo = isOpen && isInfo === i && (
-				<InfoWindow position={{ lat: s.Latitude, lng: s.Longitude }}>
-					<React.Fragment>
-						<Header content={s.LocName.List[1].Value} />
-						<Divider />
-						<List>
-							<List.Item>{s.Address.List[1].Value}</List.Item>
-						</List>
-					</React.Fragment>
-				</InfoWindow>
-			)
-			return (
-				<Marker key={i} position={{ lat: s.Latitude, lng: s.Longitude }} onClick={() => toggleInfo(true, i)}>
-					{StationInfo}
-				</Marker>
-			)
-		})
+
 	return (
 		<React.Fragment>
+			<LoadScript id="script-loader" googleMapsApiKey={GOOGLEAPIKEY}>
+				<GoogleMap
+					id="example-map"
+					mapContainerStyle={{
+						height: '400px',
+						width: '800px'
+					}}
+					zoom={7}
+					center={center}
+				>
+					<MarkerClusterer
+						options={{
+							imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+						}}
+					>
+						{clusterer =>
+							!isEmpty(station) &&
+							station.map((s, i) => {
+								return (
+									<Marker
+										key={i}
+										position={{ lat: s.Latitude, lng: s.Longitude }}
+										onClick={async () => {
+											await changeCenter({ lat: s.Latitude, lng: s.Longitude })
+											await openInfoWindow(s.Id)
+										}}
+										clusterer={clusterer}
+									>
+										{infoWindow === s.Id && (
+											<InfoWindow
+												onLoad={infoWindow => {
+													console.log('infoWindow: ', infoWindow)
+												}}
+												position={center}
+											>
+												<React.Fragment>
+													<Header content={s.LocName.List[1].Value} />
+													<Divider />
+													<List>
+														<List.Item>{s.Address.List[1].Value}</List.Item>
+													</List>
+												</React.Fragment>
+											</InfoWindow>
+										)}
+									</Marker>
+								)
+							})
+						}
+					</MarkerClusterer>
+				</GoogleMap>
+			</LoadScript>
 			<pre>{JSON.stringify(station, null, 2)}</pre>
-			<GoogleMap defaultZoom={7} defaultCenter={{ lat: 23.5, lng: 120 }}>
-				<MarkerClusterer>{StationMark}</MarkerClusterer>
-			</GoogleMap>
 		</React.Fragment>
 	)
 }
 
-const enhancer = compose(
-	withProps({
-		/**
-		 * Note: create and replace your own key in the Google console.
-		 * https://console.developers.google.com/apis/dashboard
-		 * The key "AIzaSyBkNaAGLEVq0YLQMi-PYEMabFeREadYe1Q" can be ONLY used in this sandbox (no forked).
-		 */
-		googleMapURL:
-			'https://maps.googleapis.com/maps/api/js?key=AIzaSyAkdvJpmaNSRVqu35dqpgqcEHVso3OilEc&v=3.exp&libraries=geometry,drawing,places',
-		loadingElement: <div style={{ height: `100%` }} />,
-		containerElement: <div style={{ height: `400px` }} />,
-		mapElement: <div style={{ height: `100%` }} />
-	}),
-	withScriptjs,
-	withGoogleMap
-)
+const enhancer = compose()
 
 export default enhancer(GogoroStationMap)

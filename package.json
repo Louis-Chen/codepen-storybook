@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-google-maps/api": "^1.2.3-alpha.4",
     "@storybook/addon-centered": "^5.0.6",
     "@storybook/addon-console": "^1.1.0",
     "@storybook/addon-info": "^5.0.6",
