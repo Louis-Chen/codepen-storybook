@@ -82,7 +82,7 @@ const Card = withFormik({
 		<div onClick={() => setToggle(true)}>{title}</div>
 	)
 	return (
-		<Draggable draggableId={`${id}`} type="CARD" index={index}>
+		<Draggable draggableId={`draggableId-${id}`} type="CARD" index={index}>
 			{(provided, snapshot) => (
 				<React.Fragment>
 					<div

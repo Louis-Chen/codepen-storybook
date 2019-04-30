@@ -72,7 +72,7 @@ const Lane = withFormik({
 				/>
 			</Form>
 			<div style={OuterWrapperStyle}>
-				<Droppable droppableId={`${id}`}>
+				<Droppable droppableId={`droppableId-${id}`}>
 					{(provided, snapshot) => (
 						<div {...provided.droppableProps} ref={provided.innerRef} style={InnerWrapperStyle}>
 							{children}

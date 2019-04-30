@@ -19,12 +19,12 @@ const CategoryBlock = ({ categories, catalogs }) => {
 			return
 		}
 
-		const sourceLane = lanes.find(l => l.id === source.droppableId)
+		const sourceLane = lanes.find(l => `droppableId-${l.id}` === source.droppableId)
 
-		const targetLane = lanes.find(l => l.id === destination.droppableId)
+		const targetLane = lanes.find(l => `droppableId-${l.id}` === destination.droppableId)
 
 		const movingCard = sourceLane.tags.find(t => {
-			return t === draggableId
+			return `draggableId-${t}` === draggableId
 		})
 
 		const newLanes = map(lanes, lane => {
